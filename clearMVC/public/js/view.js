@@ -1,7 +1,7 @@
 'use strict';
 (function() {
 
-    function Gallery (items) {        
+    function Gallery (items) {
         this.DOMElements = {
             filmContainer       : document.querySelector("#filmContainer"),
             filmSearch          : document.querySelector("#filmSearch"),
@@ -9,13 +9,10 @@
             refreshBtn          : document.querySelector("#refreshBtn")
         };
 
-        //this.saveDefer = $.Deferred();
         this.items = items;
-        this.counter = 0;
         this.searchString = "star wars";
 
         this.eventHolder = $({});
-        this.updateEventName = "update";
         this.searchFilmEventName = "search";
         this.init();
     }
@@ -29,14 +26,14 @@
         
         buildGallery : function () {
             var self = this;
-
-            while(this.DOMElements.filmContainer.firstChild){
-                this.DOMElements.filmContainer.removeChild(this.DOMElements.filmContainer.firstChild);
-            }
+            var filmsList = document.createElement('div');
+            filmsList.className = 'container';
+            this.DOMElements.filmContainer.removeChild(this.DOMElements.filmContainer.firstChild);
+            //
             this.items.forEach( function (element) {
-                self.DOMElements.filmContainer.appendChild(self.buildFilmBlock(element));
+                filmsList.appendChild(self.buildFilmBlock(element));
             });
-
+            self.DOMElements.filmContainer.appendChild(filmsList);
             console.log("Gallery is ready");
         },
 
@@ -71,28 +68,11 @@
         },
 
         initListeners : function () {
-            
-            /*this.DOMElements.saveBtn.addEventListener("click", () => {
-                let item = this.items[0];
-                item.name = "New name";
-                this.saveDefer.resolve(item);
-            });*/
-
             this.DOMElements.filmSearch.addEventListener("change", (e) => {
                 this.eventHolder.trigger( this.searchFilmEventName , [{searchString: this.DOMElements.filmSearch.value}]);
-                // let item = this.items[0];
-                // item.name = "New name";
-                // this.saveDefer.resolve(item);
             });
-
-            this.DOMElements.refreshBtn.addEventListener("click", () => {
-                this.eventHolder.trigger( this.updateEventName , [{counter: this.counter++}]);
-            });
-        } 
-
-    }
-    
+        }
+    };
     window.app = window.app || {};
     window.app.Gallery = Gallery;
-    
 }());
